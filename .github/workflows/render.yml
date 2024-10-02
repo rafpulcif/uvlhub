@@ -32,6 +32,16 @@ jobs:
               exit 1
             fi
           fi
+      - name: Allow deployment only if tag created
+        run: |
+          if [ ${{ github.event_name }} == 'push' ]; then
+            if [ ${{ github.ref_type }} == 'tag' ]; then
+              echo "Tag created. Deploying to Render..."
+            else
+              echo "Tag not created. Skipping deployment."
+              exit 1
+            fi
+          fi
 
       - name: Deploy to Render
         env:
